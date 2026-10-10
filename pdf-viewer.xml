@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+  <action name="show_report_pdf" type="Javascript"><![CDATA[
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get("id") || "laporan";
+
+      var documents = {
+        "laporan": "laporan.pdf",
+        "lampiran": "lampiran.pdf"
+      };
+
+      if (!Object.prototype.hasOwnProperty.call(documents, id)) {
+        console.error("ID PDF tidak terdaftar:", id);
+        return;
+      }
+
+      if (document.getElementById("report-pdf-viewer")) {
+        return;
+      }
+
+      var frame = document.createElement("iframe");
+      frame.id = "report-pdf-viewer";
+      frame.title = "Dokumen pengujian";
+      frame.src =
+        "https://ryanedua.github.io/verification-demo/files/" +
+        documents[id];
+
+      frame.style.cssText =
+        "position:fixed;top:0;left:0;width:100%;height:100%;" +
+        "border:0;background:white;z-index:2147483647;";
+
+      document.body.appendChild(frame);
+    }());
+  ]]></action>
+
+  <events
+    name="report_pdf_events"
+    onxmlcomplete="show_report_pdf();"
+  />
+</krpano>
